@@ -41,6 +41,13 @@ class RunsModel extends CI_Model
 		return $runs;
 	}
 	
+	/**
+	 * This function selects a run based on id
+	 *
+	 * @param string $runId
+	 *
+	 * @return Run | false
+	 */
 	public function selectRun($runId)
 	{
 		$run = false;
@@ -62,6 +69,10 @@ class RunsModel extends CI_Model
 	 * This function saves/updates Runs given to it.
 	 *
 	 * @param Run $run
+	 *
+	 * @return boolean
+	 *
+	 * @throws \Exception 
 	 */
 	public function saveRun($run)
 	{
@@ -91,8 +102,7 @@ class RunsModel extends CI_Model
 						
 			$response = $this->db->simple_query($SQL);
 			if  (!$response){
-				var_dump($this->db->error());
-				exit();
+				throw new \Exception("An error has occured when saving the run passed.");
 			}
 			return true;
 		} else {

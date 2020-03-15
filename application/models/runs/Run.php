@@ -97,4 +97,21 @@ class Run
 		return $this->operator;
 	}
 	
+	/**
+	 *  This returns this object as an array instead. Useful for converting over to
+	 *  javascript.
+	 *
+	 *  @return array
+	 */
+	public function asArray()
+	{
+		$run = [
+			'id' => $this->getId(),
+			'trainLine' => $this->getTrainLine(),
+			'route' => $this->getRoute(),
+			'operator' => $this->getOperator()
+		];
+		return $run;
+	}
+	
 }

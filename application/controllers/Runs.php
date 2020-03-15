@@ -9,9 +9,15 @@ class Runs extends CI_Controller
 {
 	/** These are the varaibles avaible in the view */
 	const DATA_RUNS = 'runs';
+	const DATA_RUNS_ARRAY = 'runsArray';
 	const DATA_MESSAGE = 'message';
 	const DATA_MESSAGE_CLASS = 'messageClass';
 	const DATA_RUN_POST_ENDPOINT = 'runPostEndpoint';
+	const DATA_DELETE_ENDPOINT =  'runDeleteEndpoint';
+	
+	/** These are the message classes for use */
+	const MESSAGE_SUCCESS = 'message-success';
+	const MESSAGE_ERROR = 'message-error';
 	
 	/**
 	 * @var string The base url for my application.
@@ -57,13 +63,33 @@ class Runs extends CI_Controller
 			$run->setRoute($route);
 			$run->setOperator($operator);
 			$this->RunsModel->saveRun($run);
-			$data = $this->loadBaseData("Successfully updated/created Run!", "message-success");
+			$data = $this->loadBaseData("Successfully updated/created Run!", self::MESSAGE_SUCCESS);
 			$this->load->view('Runs/RunsOutput', $data);
 		} catch (\Exception $e) {
-			$data['runs'] = $this->RunsModel->selectAll();
 			$message = "An error has occured: " . $e->getMessage();
-			$class = "message-error";
-			$data = $this->loadBaseData($message,  $class);
+			$data = $this->loadBaseData($message,  self::MESSAGE_ERROR);
+			$this->load->view('Runs/RunsOutput', $data);
+		}
+	}
+	
+	/**
+	 * This function handles deleting an run
+	 * - This method expects a post request
+	 */
+	public function deleteRun()
+	{
+		try {
+			$id =  (!empty($_POST['id'])) ? $_POST['id'] : false;
+			if (!$id) {
+				throw new \Exception("An ID was not posted for deletion");
+			}
+			$this->RunsModel->deleteRun($id);
+			$message = "Successfully removed Run: " . $id;
+			$data = $this->loadBaseData($message, self::MESSAGE_SUCCESS);
+			$this->load->view('Runs/RunsOutput', $data);
+		} catch (\Exception $e) {
+			$message = "An error has occured: " . $e->getMessage();
+			$data = $this->loadBaseData($message,  self::MESSAGE_ERROR);
 			$this->load->view('Runs/RunsOutput', $data);
 		}
 	}
@@ -80,11 +106,35 @@ class Runs extends CI_Controller
 	{
 		$data = [
 			self::DATA_RUNS => $this->RunsModel->selectAll(),
+			self::DATA_RUNS_ARRAY => [],
 			self::DATA_MESSAGE => $message,
 			self::DATA_MESSAGE_CLASS => $class,
 			self::DATA_RUN_POST_ENDPOINT => $this->siteUrl . 'runs/saveRun',
+			self::DATA_DELETE_ENDPOINT => $this->siteUrl  . 'runs/deleteRun',
 		];
+		if (!empty($data['runs']))  {
+			$data[self::DATA_RUNS_ARRAY]  = $this->generateRunsArray($data['runs']);
+		}
 		return $data;
+	}
+	
+	/**
+	 * This function returns the array forms of the runs.
+	 * - This is used to covert them into javascript objects later
+	 *
+	 * @param array $runs
+	 *
+	 * @return array
+	 */
+	private function generateRunsArray($runs)
+	{
+		$runsArray = [];
+		if (!empty($runs)) {
+			foreach($runs as $id => $r) {
+				$runsArray[$id] = $r->asArray();
+			}
+		}
+		return $runsArray;
 	}
 	
 }

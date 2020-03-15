@@ -41,4 +41,83 @@ class RunsModel extends CI_Model
 		return $runs;
 	}
 	
+	/**
+	 * This function selects a run based on id
+	 *
+	 * @param string $runId
+	 *
+	 * @return Run | false
+	 */
+	public function selectRun($runId)
+	{
+		$run = false;
+		$SQL =  "SELECT * FROM
+					`railtracks`.`trainruns`
+				WHERE
+					`trainruns`.`id` = '$runId'
+				LIMIT 1";
+					
+		$query = $this->db->query($SQL);
+		$data = $query->result_array();
+		if (!empty($data)) {
+			$run = $this->RunFactory->doCreateObject($data[0]);
+		}
+		return $run;
+	}
+	
+	/**
+	 * This function saves/updates Runs given to it.
+	 *
+	 * @param Run $run
+	 *
+	 * @return boolean
+	 *
+	 * @throws \Exception 
+	 */
+	public function saveRun($run)
+	{
+		if ($this->RunFactory->checkInstance($run)) {
+			$runCheck = $this->selectRun($run->getId());
+			if ($runCheck) {
+				$run->setId($runCheck->getId());
+			}
+			$id = filter_var($run->getId(), FILTER_SANITIZE_STRING);
+			$trainLine = filter_var($run->getTrainLine(), FILTER_SANITIZE_STRING);
+			$route = filter_var($run->getRoute(), FILTER_SANITIZE_STRING);
+			$operator = filter_var($run->getOperator(), FILTER_SANITIZE_STRING);
+			$SQL = "INSERT INTO `railtracks`.`trainruns` (
+						`id`,
+						`trainLine`,
+						`route`,
+						`operator`
+					) VALUES (
+						'$id',
+						'$trainLine',
+						'$route',
+						'$operator'
+					) ON DUPLICATE KEY UPDATE
+						`trainLine` =  VALUES(`trainLine`),
+						`route` = VALUES(`route`),
+						`operator` = VALUES(`operator`)";
+						
+			$response = $this->db->simple_query($SQL);
+			if  (!$response){
+				throw new \Exception("An error has occured when saving the run passed.");
+			}
+			return true;
+		} else {
+			throw new \Exception("Invalid instance passed into function: Must be an instance of Run");
+		}
+	}
+	
+	/**
+	 * This function returns the base object from the factory used in this model
+	 *
+	 * @return Run
+	 */
+	public function getBaseRun()
+	{
+		return $this->RunFactory->getBaseObject();
+	}
+	
 }

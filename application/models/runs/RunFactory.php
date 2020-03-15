@@ -44,4 +44,21 @@ class RunFactory
 		return $object;
 	}
 	
+	/**
+	 * This function checks an instance to see if it is an
+	 * instance of Run
+	 *
+	 * @param mixed $run
+	 *
+	 * @return bool
+	 */
+	public function checkInstance($run)
+	{
+		if ($run instanceof Run) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 }

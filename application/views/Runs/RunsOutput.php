@@ -11,12 +11,12 @@
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ($runs as $r) { ?>
+				<?php foreach ($runs as  $r) { ?>
 					<tr>
-						<td><?php echo $r['lineId']; ?></td>
-						<td><?php echo $r['routeId']; ?></td>
-						<td><?php echo $r['runNumber']; ?></td>
-						<td><?php echo $r['operatorId']; ?></td>
+						<td><?php echo $r->getTrainLine(); ?></td>
+						<td><?php echo $r->getRoute(); ?></td>
+						<td><?php echo $r->getId(); ?></td>
+						<td><?php echo $r->getOperator(); ?></td>
 					</tr>
 				<?php } ?>
 			</tbody>

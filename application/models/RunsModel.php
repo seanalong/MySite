@@ -111,6 +111,32 @@ class RunsModel extends CI_Model
 	}
 	
 	/**
+	 * This function handles removing a Run from the database.
+	 *
+	 * @param string $id
+	 *
+	 * @return true
+	 *
+	 * @throws \Exception
+	 */
+	public function deleteRun($id)
+	{
+		if (empty($id)) {
+			throw new \Exception("An invalid id was passed");
+		}
+		if ($run = $this->selectRun($id)) {
+			$SQL = "DELETE FROM `railtracks`.`trainruns` WHERE `id` = '$id'";
+			$response =  $this->db->simple_query($SQL);
+			if (!$response) {
+				throw new \Exception("An error occured when deleting Run: " . $id);
+			}
+			return true;
+		} else {
+			throw new \Exception("Run passed was not found in the DB.");
+		}
+	}
+	
+	/**
 	 * This function returns the base object from the factory used in this model
 	 *
 	 * @return Run

@@ -101,3 +101,19 @@
 		<input id="run-form-submit" type="submit" value="Create New Run">
 	</form>
 </div>
+<?php if (!empty($runs)) { ?>
+	<h3>Delete Runs</h3>
+	<div class="runs-form-delete">
+		<form action="<?php echo $runDeleteEndpoint; ?>" method="post">
+			<div>
+				<label for="deleteId">Select Run Id: </label>
+				<select id="deleteId" name="id">
+					<?php foreach($runs as $id => $run) { ?>
+						<option value="<?php echo $id; ?>"><?php echo $id; ?></option>
+					<?php } ?>
+				</select>
+				<input id="run-delete-submit" type="submit" value="Delete Selected Run">
+			</div>
+		</form>
+	</div>
+<?php } ?>

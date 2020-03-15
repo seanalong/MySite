@@ -26,10 +26,19 @@ class RunsModel extends CI_Model
 	 */
 	public function selectAll()
 	{
-		$SQL = "SELECT * FROM `railtracks`.`runs`";
+		$runs = [];
+		$SQL = "SELECT * FROM `railtracks`.`trainruns`";
 		$query = $this->db->query($SQL);
 		$data = $query->result_array();
-		return $data;
+		if (!empty($data)) {
+			foreach($data as $runData) {
+				$r = $this->RunFactory->doCreateObject($runData);
+				if (!empty($r->getId())) {
+					$runs[$r->getId()] = $r;
+				}
+			}
+		}
+		return $runs;
 	}
 	
 }

@@ -52,7 +52,7 @@ class Run
 	/**
 	 *  This function returns the train line
 	 */
-	public function getTrainLine($trainLine)
+	public function getTrainLine()
 	{
 		return $this->trainLine;
 	}

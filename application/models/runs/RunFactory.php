@@ -1,6 +1,11 @@
 <?php
 include __DIR__ . '/Run.php';
 
+/**
+ * This class's job is to construct the Run objects using
+ * data from the database.
+ *
+ */
 class RunFactory
 {
 	/**
@@ -11,6 +16,32 @@ class RunFactory
 	public function getBaseObject()
 	{
 		return new Run();
+	}
+	
+	/**
+	 * This function handles creating a route object from
+	 * data from the database and turing it into a Run object
+	 *
+	 * @param array $data The data from the databse
+	 *
+	 * @return Run
+	 */
+	public function doCreateObject($data)
+	{
+		$object = $this->getBaseObject();
+		if (isset($data['id'])) {
+			$object->setId($data['id']);
+		}
+		if (isset($data['trainLine'])) {
+			$object->setTrainLine($data['trainLine']);
+		}
+		if (isset($data['route'])) {
+			$object->setRoute($data['route']);
+		}
+		if (isset($data['operator'])) {
+			$object->setOperator($data['operator']);
+		}
+		return $object;
 	}
 	
 }

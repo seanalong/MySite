@@ -45,7 +45,7 @@ class Runs extends CI_Controller
 	}
 	
 	/**
-	 * This function handles the creation Prequest for a new run
+	 * This function handles the creation request for a new run
 	 * - This method expects a post request
 	 */
 	public function saveRun()

@@ -27,6 +27,7 @@ class Run
 	public function setId($id)
 	{
 		$this->id = (string) $id;
+		$this->id = trim($id);
 	}
 	
 	/**

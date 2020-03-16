@@ -85,6 +85,9 @@ class RunsModel extends CI_Model
 			$trainLine = filter_var($run->getTrainLine(), FILTER_SANITIZE_STRING);
 			$route = filter_var($run->getRoute(), FILTER_SANITIZE_STRING);
 			$operator = filter_var($run->getOperator(), FILTER_SANITIZE_STRING);
+			if (empty($id) || empty(trim($trainLine)) || empty(trim($route))  || empty(trim($operator))) {
+				throw new \Exception("Empty field detected. Make sure a value is set for each field");
+			}
 			$SQL = "INSERT INTO `railtracks`.`trainruns` (
 						`id`,
 						`trainLine`,

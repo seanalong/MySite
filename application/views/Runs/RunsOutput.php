@@ -79,6 +79,16 @@
 		</table>
 	</div>
 <?php } ?>
+<h3>Upload CSV File</h3>
+<div>
+	<form action="<?php echo $uploadCsvEndpoint; ?>" method="post" enctype="multipart/form-data">
+		<div>
+			<label for="csvUpload">Select A File</label>
+			<input type="file" id="csvUpload" name="csv" value="">
+			<input type="submit" id="csv-upload-button" value="Upload A File">
+		</div>
+	</form>
+</div>
 <h3>Create/Update A Run</h3>
 <div class="runs-form-container">
 	<form action="<?php echo $runPostEndpoint; ?>" method="post">
